@@ -1,0 +1,68 @@
+.textbox {
+    width: 78%;
+    height: 96vh;
+    float: left;
+    resize: none;
+}
+
+#chatbox {
+    width: 78%;
+    float: left;
+}
+
+#user-select {
+    outline: auto;
+    width: 100%;
+}
+
+.left {
+    float: left;
+}
+
+.groupbox {
+    width: 20%;
+    height: 40vh;
+    float: right;
+    overflow-y: auto;
+}
+
+.selected {
+    background-color: lightgrey;
+}
+
+tr {
+    outline: auto;
+}
+
+html {
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.messagetable {
+    width: 100%;
+}
+
+.user {
+    width: 15%;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+}
+
+.content {
+    width: 85%;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-weight: 200;
+}
+
+.outlined {
+    outline: auto;
+}
