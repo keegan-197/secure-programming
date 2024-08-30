@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <script src="conversions.js"></script>
+    <script src="crypto.js"></script>
+    <script src="networking.js"></script>
+    <script src="messaging.js"></script>
+    <script defer src="dom_handlers.js"></script>
     <title>Secure Programming</title>
 </head>
 <body>
@@ -66,6 +70,6 @@
             </tr>
         </table>
     </div>
-    <input type="text" id="chatbox">
+    <input type="text" id="chatbox" onkeypress="chatKeyPressed(event)">
 </body>
 </html>

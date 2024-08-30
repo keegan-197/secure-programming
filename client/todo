@@ -1,0 +1,18 @@
+message receive handling
+
+global chat sending
+table for active users
+ - button to refresh active users
+  - sends client_list request
+  - handle client_list response
+include self in chat participants
+ - add the value when hello sent?
+ - connect to server on hello sent?
+
+update sendData to include the counter, signature, type
+add input for private and public keys
+button to send the hello to server
+
+all file transfer stuff
+
+float chat messages left
