@@ -1,4 +1,9 @@
 message receive handling
+ - decrypting private messages
+ - checking data nonce?
+ - checking message signature
+ - generating message signature
+ - generating data nonce
 
 global chat sending
 table for active users

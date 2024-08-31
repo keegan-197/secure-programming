@@ -40,7 +40,7 @@ messages = { // temporary list of messages
 }
 
 function chatKeyPressed(event) { // detect input box enter pressed
-    console.log(event.keyCode);
+    // console.log(event.keyCode);
     if (event.keyCode == 13) {
         chatSendHandler();
     }

@@ -1,6 +1,14 @@
-function generateChatObj() { // generate a chat object from the input box
+async function generateChatObj() { // generate a chat object from the input box
+    let participants = [] // TODO add self public key fingerprint before the others
+    let selfFingerprint = await sha256Digest(selfKeys["public"]);
+    participants.push(selfFingerprint);
+    for (participantKey of activeChats[selectedChat]['participantKey']) {
+        let fingerprint = await sha256Digest(participantKey);
+        participants.push(fingerprint);
+    }
+
     chat = { // TODO include self in participants
-        "participants": activeChats[selectedChat]['participantKey'],
+        "participants": participants,
         "message": document.getElementById("chatbox").value
     };
     
@@ -22,7 +30,7 @@ async function sendChat() {
     let b64ExportedKey = _arrayBufferToBase64(exported_key);
 
 
-    let chatObj = generateChatObj(); // generate a chat object from the textbox and selected group
+    let chatObj = await generateChatObj(); // generate a chat object from the textbox and selected group
     let strChatObj = JSON.stringify(chatObj); // turn the chat object into string
     let messageBuffer = _stringToArrayBuffer(strChatObj); // turn the string into an array buffer so it can be encrypted
     let encrypted_message = await window.crypto.subtle.encrypt(aes_settings, generated_key, messageBuffer); // encrypt the array buffer
@@ -43,6 +51,16 @@ async function sendChat() {
         symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
     }
 
+    // add self public key to the symmetric keys list for testing
+    // TODO remove
+    // if (false) {
+    //     let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
+
+    //     let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
+        
+    //     symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
+    // }
+
     data = {
         "type": "chat",
         "destination_servers": activeChats[selectedChat]['destinationServers'],
@@ -59,7 +77,9 @@ async function sendChat() {
 function sendData(data) {
     // called in all data send functions
     // wraps the data with counter, signature, type as per https://github.com/xvk-64/2024-secure-programming-protocol?tab=readme-ov-file#sent-by-client
-    message = data
+    message = {
+        "data": data
+    }
 
     sendMessage(message);
 }
@@ -74,4 +94,61 @@ function getConnectedUsers() {
 
 
     return ;
+}
+
+function receivedMessage(message) { // handle every message received over the socket
+    try {
+        message = JSON.parse(message); // try to parse the data
+    } catch(err) {
+        console.log("Received message: " + message); // maybe the server will send us a string?
+        return;
+    }   
+
+    // TODO update this to signed_data
+    if ("data" in message) { // handle the different types of data messages
+        if (message["data"]["type"] == "public_chat") {
+            console.log("Received public_chat"); // TODO implement this
+        } else if (message["data"]["type"] == "chat") {
+            console.log("Received chat");
+            handleChat(message); // handle a private chat message
+        }
+    }
+}
+
+async function decryptSymKeys(symm_keys) {
+    // Use my RSA priv key to check if a message is for me
+    let importedKeySettings = { // RSA settings
+        "name": "RSA-OAEP",
+        "hash": "SHA-256"
+    }
+
+    for (symm_key of symm_keys) { // loop through all symm keys
+        let unencoded_key = _base64ToArrayBuffer(symm_key); // convert the b64 key into an arraybuffer so it can be used
+        // import my own RSA private key
+        let self_rsa_priv_key = await window.crypto.subtle.importKey('pkcs8', _pemToArrayBuffer(selfKeys['private']), importedKeySettings, true, ['decrypt']) // import self private RSA key
+        let dec_symm_keys;
+        try { // try to decrypt the current symm key with my priv RSA key
+            dec_symm_keys = await window.crypto.subtle.decrypt(importedKeySettings, self_rsa_priv_key, unencoded_key);
+        } catch (err) {
+            console.log("Couldnt decrypt");
+            continue;
+        }
+        // if I can decrypt a symm key, then message meant for me, return the symm key
+        console.log("Decrypted my key!");
+        return dec_symm_keys;
+    }
+    // message not meant for me
+    return false;
+}
+
+async function handleChat(message) {
+    // try to decrypt all symmetric keys
+    // if can decrypt one, then the message is meant for me, use that key
+    let decryptedSymmKeys = await decryptSymKeys(message["data"]["symm_keys"]);
+    
+    if (decryptedSymmKeys) {
+        console.log("Received a message for me!");
+    } else {
+        console.log("Received a message not for me :(");
+    }
 }

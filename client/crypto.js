@@ -9,9 +9,48 @@ async function generateAESKey() {
     return [new_iv, generated_key, aes_settings]
 }
 
-async function sha256Digest(list) { // create a digest from a list
-    // essentially fingerprints the entries of a list
-    let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(list.sort().join()));
+async function sha256Digest(data) { // create a digest from a piece of data
+    if (typeof(data) == "object") { // if data is a list, sort and join it before fingerprinting
+        data = data.sort().join();
+    }
+
+    // essentially fingerprints the data
+    let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(data));
     let bytes = new Uint16Array(digest);
     return _arrayBufferToBase64(bytes);
 }
+
+
+// Used to split the b64 PEM into rows of 65 chars
+function insertCharEveryN(str, char, n) {
+    let new_str = "";
+
+    for (let i = 0; i < str.length; i++) {
+        new_str += str[i];
+        if ((i+1) % n == 0 && i != str.length-1) {
+            new_str += char;
+        }
+    }
+
+    return new_str;
+}
+
+// helper function to generate an RSA key pair
+async function genRSAKeyPair() {
+    let keySettings = {
+        "name": "RSA-OAEP",
+        "hash": "SHA-256",
+        "modulusLength": 2048,
+        "publicExponent": new Uint8Array([0x01, 0x00, 0x01])
+    }
+    
+    let keys = await window.crypto.subtle.generateKey(keySettings, true, ["encrypt", "decrypt"]);
+    let exportedPriv = await window.crypto.subtle.exportKey('pkcs8', keys.privateKey);
+    let exportedPub = await window.crypto.subtle.exportKey('spki', keys.publicKey);
+
+    return {
+        "public": exportedPub,
+        "private": exportedPriv
+    }
+}
+
