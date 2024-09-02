@@ -52,6 +52,13 @@ function _stringToArrayBuffer(string) {
     return messageEncoded.buffer;
 }
 
+// Convert an array buffer back into a string
+function _arrayBufferToString(arrBuff) {
+    let dec = new TextDecoder();
+    let messageDecoded = dec.decode(arrBuff);
+    return messageDecoded;
+}
+
 function _RSAArrayBufferToPemRows(buffer) {
     return insertCharEveryN(_arrayBufferToBase64(buffer), "\n", 64);
 }

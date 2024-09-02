@@ -82,7 +82,7 @@ XV8Kus7y57J+zxF9jfyP76PQ
 
 var activeChats = [ // this will be updated by the client to add new chats
     {
-        "destinationServers": ["192.168.1.1", "192.168.1.2"],
+        "destinationServers": ["192.168.1.1", "192.168.1.1", "192.168.1.2"],
         "participantKey": ["rsakey1", "rsakey2", "rsakey3"], // actual public keys of each participant
         "participantDigest": "Q+6fz2lL2yQDOM7U7lAtkQ==" // list of participant public keys, sorted, joined, hashed, then b64'd
     },

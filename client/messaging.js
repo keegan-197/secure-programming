@@ -1,3 +1,5 @@
+activeUsers = [];
+
 async function generateChatObj() { // generate a chat object from the input box
     let participants = [] // TODO add self public key fingerprint before the others
     let selfFingerprint = await sha256Digest(selfKeys["public"]);
@@ -53,13 +55,13 @@ async function sendChat() {
 
     // add self public key to the symmetric keys list for testing
     // TODO remove
-    // if (false) {
-    //     let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
+    if (true) {
+        let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
 
-    //     let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
+        let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
         
-    //     symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
-    // }
+        symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
+    }
 
     data = {
         "type": "chat",
@@ -102,16 +104,23 @@ function receivedMessage(message) { // handle every message received over the so
     } catch(err) {
         console.log("Received message: " + message); // maybe the server will send us a string?
         return;
-    }   
+    }
 
-    // TODO update this to signed_data
-    if ("data" in message) { // handle the different types of data messages
-        if (message["data"]["type"] == "public_chat") {
-            console.log("Received public_chat"); // TODO implement this
-        } else if (message["data"]["type"] == "chat") {
-            console.log("Received chat");
-            handleChat(message); // handle a private chat message
+    if (message["type"] == "signed_data") {
+        // TODO update this to signed_data
+        if ("data" in message) { // handle the different types of data messages
+            if (message["data"]["type"] == "public_chat") {
+                // handle receiving public chat message
+                console.log("Received public_chat"); // TODO implement this
+            } else if (message["data"]["type"] == "chat") {
+                // handle receiving private chat message
+                console.log("Received chat");
+                handleChat(message); 
+            }
         }
+    } else if (message["type"] == "client_list") {
+        // handle receiving client list responses
+        handleClientList(message["servers"]);
     }
 }
 
@@ -141,14 +150,56 @@ async function decryptSymKeys(symm_keys) {
     return false;
 }
 
+// called when the client receives a client_list update
+async function handleClientList(servers) {
+    // add a fingerprint to each of the clients so they can be displayed nicely
+    for (let server of servers) {
+        server["digest"] = [];
+        for (let client of server["clients"]) {
+            server["digest"].push(await sha256Digest(client));
+        }
+    }
+    // update the active users table
+    activeUsers = servers;
+    updateActiveUsersList();
+}
+
 async function handleChat(message) {
     // try to decrypt all symmetric keys
     // if can decrypt one, then the message is meant for me, use that key
-    let decryptedSymmKeys = await decryptSymKeys(message["data"]["symm_keys"]);
+    let decryptedSymmKey = await decryptSymKeys(message["data"]["symm_keys"]);
+    console.log(decryptedSymmKey);
     
-    if (decryptedSymmKeys) {
+    
+    let b64key = _arrayBufferToString(decryptedSymmKey);
+    let aes_buffer = _base64ToArrayBuffer(b64key);
+
+    let symm_key = await window.crypto.subtle.importKey("raw", aes_buffer, {"name": "AES-GCM"}, false, ['decrypt']);
+
+    if (decryptedSymmKey) { // received a message for me
+        // decrypt the chat data
+
+        let iv_buffer = _base64ToArrayBuffer(message["data"]["iv"]);
+        let aes_settings = { name: "AES-GCM", iv: iv_buffer, length: 256 };
+
+        let chat = _base64ToArrayBuffer(message["data"]["chat"]);
+
+        let decrypted_chat = await window.crypto.subtle.decrypt(aes_settings, symm_key, chat);
+        let received_chat = _arrayBufferToString(decrypted_chat);
         console.log("Received a message for me!");
-    } else {
+        console.log(received_chat);
+    } else { // received a message not meant for me
         console.log("Received a message not for me :(");
     }
+}
+
+// send hello
+function sendHello() {
+    updateKeys();
+    sendData({"type": "hello", "public_key": selfKeys["public"]});
+}
+
+// send client_list_request
+function refreshActive() {
+    sendMessage({"type":"client_list_request"});
 }

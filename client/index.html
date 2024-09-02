@@ -9,6 +9,7 @@
     <script src="networking.js"></script>
     <script src="messaging.js"></script>
     <script defer src="dom_handlers.js"></script>
+    <script src="listeners.js"></script>
     <title>Secure Programming</title>
 </head>
 <body>
@@ -36,8 +37,8 @@
             </tr>
         </table>
     </div>
-    <div class="groupbox outlined">
-        <table id="user-select">
+    <div class="groupbox outlined right scrollable">
+        <table class="fill" id="user-select">
             <tr class="selected">
                 <th>global</th>
             </tr>
@@ -69,6 +70,111 @@
                 <th>chat 9</th>
             </tr>
         </table>
+    </div>
+    <div class="outlined right">
+        <span>
+            <p class="keyentry-tag left">Public: </p>
+            <textarea type="text" class="keyentry right" id="pub-entry"></textarea>
+        </span>
+        <br>
+        <span>
+            <p class="keyentry-tag left">Private: </p>
+            <textarea type="text" class="keyentry right" id="priv-entry"></textarea>
+        </span>
+        <button id="hello">Connect</button>
+    </div>
+    <div class="groupbox outlined right">
+        <div class="scrollable vfill">
+            <table class="fill" id="active-users">
+                <tr>
+                    <th>server1</th>
+                </tr>
+                <tr>
+                    <td>user1</td>
+                </tr>
+                <tr>
+                    <td>user2</td>
+                </tr>
+                <tr>
+                    <td>user3</td>
+                </tr>
+                <tr>
+                    <th>server2</th>
+                </tr>
+                <tr>
+                    <td>user4</td>
+                </tr>
+                <tr>
+                    <td>user 5</td>
+                </tr>
+                <tr>
+                    <th>server1</th>
+                </tr>
+                <tr>
+                    <td>user1</td>
+                </tr>
+                <tr>
+                    <td>user2</td>
+                </tr>
+                <tr>
+                    <td>user3</td>
+                </tr>
+                <tr>
+                    <th>server2</th>
+                </tr>
+                <tr>
+                    <td>user4</td>
+                </tr>
+                <tr>
+                    <td>user 5</td>
+                </tr>
+                <tr>
+                    <th>server1</th>
+                </tr>
+                <tr>
+                    <td>user1</td>
+                </tr>
+                <tr>
+                    <td>user2</td>
+                </tr>
+                <tr>
+                    <td>user3</td>
+                </tr>
+                <tr>
+                    <th>server2</th>
+                </tr>
+                <tr>
+                    <td>user4</td>
+                </tr>
+                <tr>
+                    <td>user 5</td>
+                </tr>
+                <tr>
+                    <th>server1</th>
+                </tr>
+                <tr>
+                    <td>user1</td>
+                </tr>
+                <tr>
+                    <td>user2</td>
+                </tr>
+                <tr>
+                    <td>user3</td>
+                </tr>
+                <tr>
+                    <th>server2</th>
+                </tr>
+                <tr>
+                    <td>user4</td>
+                </tr>
+                <tr>
+                    <td><Button>user 5</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <button class="center fill" onclick="refreshActive()">Refresh</p>
+        </div>
     </div>
     <input type="text" id="chatbox" onkeypress="chatKeyPressed(event)">
 </body>

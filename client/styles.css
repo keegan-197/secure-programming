@@ -15,15 +15,41 @@
     width: 100%;
 }
 
+.fill {
+    width: 100%;
+}
+
+.vfill {
+    height: 90%;
+}
+
+.scrollable {
+    overflow-y: auto;
+}
+
 .left {
     float: left;
 }
 
-.groupbox {
+.right {
     width: 20%;
-    height: 40vh;
     float: right;
-    overflow-y: auto;
+}
+
+.groupbox {
+    height: 40vh;
+}
+
+.keyentry {
+    width: 70%;
+}
+
+.keyentry-tag {
+    width: 20%;
+}
+
+.center {
+    text-align: center;
 }
 
 .selected {
@@ -42,6 +68,10 @@ html {
 
 body {
     padding: 0;
+    margin: 0;
+}
+
+p {
     margin: 0;
 }
 

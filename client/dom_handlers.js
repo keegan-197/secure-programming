@@ -39,6 +39,17 @@ messages = { // temporary list of messages
     ],
 }
 
+// update the client's locally stored keys
+// this happens whenever client writes in the key spaces, or when they send the hello to the server
+function updateKeys() {
+    let pub = document.getElementById('pub-entry').value;
+    let priv = document.getElementById('priv-entry').value;
+
+    selfKeys["public"] = pub;
+    selfKeys["private"] = priv;
+    console.log("Updated keys");
+}
+
 function chatKeyPressed(event) { // detect input box enter pressed
     // console.log(event.keyCode);
     if (event.keyCode == 13) {
@@ -47,9 +58,13 @@ function chatKeyPressed(event) { // detect input box enter pressed
 }
 
 function chatSendHandler() { // handle sending chat, and updating local message display
-    sendChat();
-    messages[getCurrentChatKey()].push({"sender": "You", "message": document.getElementById("chatbox").value});
-    updateMessagesUI();
+    if (socket['readyState'] == 1) {
+        sendChat();
+        messages[getCurrentChatKey()].push({"sender": "You", "message": document.getElementById("chatbox").value});
+        updateMessagesUI();
+    } else {
+        console.log("WebSocket not connected");
+    }
 }
 
 
@@ -116,7 +131,10 @@ function updateGroupsUI() {
 
     let tr = document.createElement('tr'); // create a new tr
     tr.appendChild(th); // add the th to the tr
-    tr.classList.add('selected'); // set the tr as selected (global chat selected as default)
+    if (selectedChat == -1) {
+        tr.classList.add('selected'); // set the tr as selected (global chat selected as default)
+    }
+        
     tr.setAttribute('onclick', 'selectChatGroup(-1)'); // give it an onclick to select it
     
     groupsTable.appendChild(tr); // add the tr to the table
@@ -128,9 +146,94 @@ function updateGroupsUI() {
         let tr = document.createElement('tr'); // create a new tr
         tr.appendChild(th); // append the th to the tr
         tr.setAttribute('onclick', 'selectChatGroup('+chat+')'); // add an onclick to select that group
+        if (selectedChat == chat) {
+            tr.classList.add('selected'); // set the tr as selected (global chat selected as default)
+        }
         groupsTable.appendChild(tr); // add the tr to the table
     }
 }
 
-updateGroupsUI() // update the groups on page load
-updateMessagesUI() // update the messages on page load
+function updateActiveUsersList() {
+    const table = document.getElementById("active-users");
+    table.innerHTML = "";
+
+    for (server of activeUsers) {
+        let th = document.createElement('th'); // create a new th
+        th.innerText = server["address"];
+        
+        let tr = document.createElement('tr'); // create a new tr
+        tr.appendChild(th); // add the th to the tr
+        
+        table.appendChild(tr); // add the tr to the table        
+
+        for (digest in server["digest"]) {
+            let td = document.createElement('td'); // create a new th
+            td.innerText = server["digest"][digest];
+            
+            let tr = document.createElement('tr'); // create a new tr
+            tr.appendChild(td); // add the th to the tr
+            
+            
+            // tr.setAttribute('onclick', `startChat()`); // give it an onclick to select it
+            tr.setAttribute('onclick', `startChat(["${server['address']}", "${server['clients'][digest]}", "${server["digest"][digest]}"])`); // give it an onclick to select it
+            table.appendChild(tr); // add the tr to the table
+        }
+    }
+}
+
+async function startChat(user_rsa) {
+    if (selectedChat == -1 ) {
+        // global chat group selected, create a new chat with the user
+        
+        // check if the chats already has the participant
+        for (let activeChat of activeChats) {
+            if (activeChat["participantKey"].length == 2 && activeChat["participantKey"].includes(user_rsa[1])) {
+                console.log("Chat already exists");
+                return;
+            }
+        }
+        
+        // create a new chat and push it into the chats
+        let new_chat = {
+            "destinationServers": [user_rsa[0]],
+            "participantKey": [selfKeys["public"], user_rsa[1]],
+            "participantDigest": user_rsa[2]
+        }
+        activeChats.push(new_chat);
+    } else {
+        // chat group selected, create a new chat with that group + the new user
+
+        // copy the selected group
+        let new_chat = structuredClone(activeChats[selectedChat]);
+
+        // if the selected group already has the user in it, do nothing
+        if (new_chat["participantKey"].includes(user_rsa[1])) {
+            console.log("Group already exists");
+            return;
+        }
+
+        // otherwise add the user to the new group
+        new_chat["participantKey"].push(user_rsa[1]);
+        
+        // create a fingerprint of the group
+        let digest = await sha256Digest(new_chat["participantKey"]);
+        
+        // loop through the group and check if we already have the group added
+        for (let activeChat of activeChats) {
+            if (activeChat["participantDigest"] == digest) {
+                console.log("Group already exists");
+                return;
+            }
+        }
+        // otherwise add the server and fingerprint to the group and push it onto the active chats
+        new_chat["destinationServers"].push(user_rsa[0]);
+        new_chat["participantDigest"] = digest;
+        activeChats.push(new_chat);
+    }
+    // updates the group list
+    updateGroupsUI();
+}
+
+updateGroupsUI(); // update the groups on page load
+updateMessagesUI(); // update the messages on page load
+addListeners(); // initialise all event listeners
