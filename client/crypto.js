@@ -10,14 +10,18 @@ async function generateAESKey() {
 }
 
 async function sha256Digest(data) { // create a digest from a piece of data
+    console.log(`Digesting data: ${data}`);
     if (typeof(data) == "object") { // if data is a list, sort and join it before fingerprinting
         data = data.sort().join();
     }
+    
 
     // essentially fingerprints the data
     let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(data));
     let bytes = new Uint16Array(digest);
-    return _arrayBufferToBase64(bytes);
+    let b64 = _arrayBufferToBase64(bytes);
+    console.log(`Returning: ${b64}`);
+    return b64;
 }
 
 

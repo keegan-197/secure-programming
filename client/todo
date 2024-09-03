@@ -6,9 +6,9 @@ message receive handling
  - checking message signature
  - generating message signature
  - generating data nonce
- - actually putting the message in the messages list and displaying it
+#  - actually putting the message in the messages list and displaying it
 
-global chat sending
+# global chat sending
 # table for active users
 #  - button to refresh active users
   # - sends client_list request
@@ -23,3 +23,4 @@ update sendData to include the counter, signature, type
 all file transfer stuff
 
 float chat messages left
+message length concatenation

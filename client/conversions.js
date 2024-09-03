@@ -59,6 +59,14 @@ function _arrayBufferToString(arrBuff) {
     return messageDecoded;
 }
 
+function _arrayBufferToPem(arrBuff, priv) {
+    if (priv == 0) {
+        return `-----BEGIN PUBLIC KEY-----\n${_RSAArrayBufferToPemRows(arrBuff)}\n-----END PUBLIC KEY-----`
+    } else {
+        return `-----BEGIN PRIVATE KEY-----\n${_RSAArrayBufferToPemRows(arrBuff)}\n-----END PRIVATE KEY-----`
+    }
+}
+
 function _RSAArrayBufferToPemRows(buffer) {
     return insertCharEveryN(_arrayBufferToBase64(buffer), "\n", 64);
 }

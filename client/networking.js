@@ -1,44 +1,83 @@
-var exampleUsers = [
+var exampleUser1 =
     {
         "public": `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA50KaF0Pqjk/pBhfr20or
-KqKW5iYoCV2lWeBykE98/+qsHTr7EKz7H3BotAHwn9BLvHymXRcZK34accWo7GPR
-7B7KNMxHuimQeX5rO5V05Wb2EertCDGDk2K+5KKHpMcwwAVpIV/Xt/RCA5o8x1Qh
-2WK8txr2jmBso4k0daJioAR1IfJsmzrBacERnapY5ZbKMbzjnsk+lH5D407DiVf0
-9XfT80C8Y7gpD0glHIoBT5dwj1t5eDIZWjWtnZelLKWasT3hYcnuF/eikyky0NgO
-b4oAxiCS1jRRMq5kQbSjUtydLWb8P6jT+sp6jNMdDM9r3VMQqasD2xLi6FJJpq4A
-hwIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkmCOvtp9EQBSRDgZE9JQ
+CMF5Sa+b4GvhpksqHEWMqL5ajOvVw6IcNIVLph1u+pZZ5zXjyKIiM/d8XurpcWoC
+xoFLH1JKEYDRU/mq1GDZGXQe1Dch25SKWWGeSkgXJySxUPxUM0Rk+QgHTLdfJW0L
+BsfAjmKmB4H8LAhVClueLEJ/znPYR3uLyrYgNWpK5msyqy9mx1bF5u7SmQFB6t7k
+CvBWVRpbHyAFvF1AbMIx0zefE/acMnEESMpEaORrbYpy1ApmxuQ4kufuMdlynm5u
+7rD7GfyTrGlcD3xIrRfCdZ5/ZNCHu7Fcc7DFm3tG4wft9WJ1zQkR4BeY5xI0q+2z
+bwIDAQAB
 -----END PUBLIC KEY-----`,
-        "private": `-----BEGIN RSA PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDnQpoXQ+qOT+kG
-F+vbSisqopbmJigJXaVZ4HKQT3z/6qwdOvsQrPsfcGi0AfCf0Eu8fKZdFxkrfhpx
-xajsY9HsHso0zEe6KZB5fms7lXTlZvYR6u0IMYOTYr7kooekxzDABWkhX9e39EID
-mjzHVCHZYry3GvaOYGyjiTR1omKgBHUh8mybOsFpwRGdqljllsoxvOOeyT6UfkPj
-TsOJV/T1d9PzQLxjuCkPSCUcigFPl3CPW3l4MhlaNa2dl6UspZqxPeFhye4X96KT
-KTLQ2A5vigDGIJLWNFEyrmRBtKNS3J0tZvw/qNP6ynqM0x0Mz2vdUxCpqwPbEuLo
-UkmmrgCHAgMBAAECggEAcGZJmJc08JhcTM7hnsKsulst9oyDFxJB5K4XYJaRzZzU
-rJxXHKLGp2AuM5dhyXsm5GS9Qy+P1zjCR5vnX4WgqR/J7eF/1zaOds5/9gTNPRZO
-8SR6smnGZqMu3tc0EF2UDzBSCZuYsFrynuefNM5qaUr5KBHd1hN9mfp82dPkFZtI
-NYCNaruHcO2v9wBt8AkLwKMurDtYYGNRV9U+VY66rJ/BFAKQwAZpK3OmOYtVJE7v
-t4jhoBX+L6mpEja7KHI7O5xjti8z1HwjexDjtxNGv9CncB7vuH1sdkRMVC5qNYfB
-tevBy5g5GiYd24nmBNLBiMW9+lJyYGCJ+z6MjallcQKBgQD/0PTQDo5cy+H0y867
-tfjEH+m7M5NOemI3VVX9m03eSkwygP4xN+WKnZKbrIZRjMP7/XyEZ6VdzppMezuF
-BXE0JojvEwbYJ6seonmJXxH7MnCaL92NapQy7o9057yfp0zhGwDx3ugBSdvCPc6X
-le/j4ZvE1JCQfPaG1N18M4opKQKBgQDnbSE9Zet5MhAx5SKg85sRXTISSCMu0POy
-pPPgmRKU6vKu9VIjHteA+VFJdD7RE7NtkutAotUw964+hSzlzb4bkx/gCP6G0djl
-g8hu9cWsuh5I/zBWLAUmljhLcVFwIPsrljNIGUGyjGtEnra2IVBd3ZVXnTHx6xpn
-YK3DBjEiLwKBgQCMYqKGrwZHPIfirBnmf0Vmc9Dzr6kOLzFJBmarRxgjfgh0yr80
-SWWJfVGgZrxLcoF2/zPfAXYJlcCtag9Ov57RLLiG4p0l8BcDN8yUq3yVqqeKpevi
-mHN9w9csI6QqxUf2XLhXA6m0U1DrNrnyDBFasEuoZ7Jx6HHtqlFlwG74iQKBgC1S
-xxbCNiqnLlrHOE/zRaRR7zN7Y0CQ9ZlACu8qq2P025B+RRbRvHzq1wues4q45AQK
-qP4gpcYQS9S8uj1LXPcDilOTD14SDPtuIrvwcEVSsgmzyKCnwF59PwsvZzahju9L
-XEG7iI1SSNPIjZn/zkCD2/Kru5NYavRiD8XJGahLAoGATQ3YE7aWOVmxB279GYCS
-QE6ZFFNcnqjPbDcQ82FiRj/f9+3CD0fcCKP53/qHeu3j1KSjLnHJqsU4L6Al/LJw
-Dm6gFvLqqZVBsn1VYXXa5XiSlTNCRQoL2pmAokB6E4ruTTJ+mymJAbSHhuKQYePn
-uEdhE0EQ4ChJwdsnUcxvFqY=
------END RSA PRIVATE KEY-----`
+        "private": `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCSYI6+2n0RAFJE
+OBkT0lAIwXlJr5vga+GmSyocRYyovlqM69XDohw0hUumHW76llnnNePIoiIz93xe
+6ulxagLGgUsfUkoRgNFT+arUYNkZdB7UNyHblIpZYZ5KSBcnJLFQ/FQzRGT5CAdM
+t18lbQsGx8COYqYHgfwsCFUKW54sQn/Oc9hHe4vKtiA1akrmazKrL2bHVsXm7tKZ
+AUHq3uQK8FZVGlsfIAW8XUBswjHTN58T9pwycQRIykRo5GttinLUCmbG5DiS5+4x
+2XKebm7usPsZ/JOsaVwPfEitF8J1nn9k0Ie7sVxzsMWbe0bjB+31YnXNCRHgF5jn
+EjSr7bNvAgMBAAECggEAIMNmEAf9iGmnAEgCLPKdIWiUyk55OGFNT5hxY4SZuEdr
+IzHCVhiZ8ZOIXDUoWwR+OQdR5d2MhE830lMIT29oEaBs/STBGWvY7s/qUcEfttfL
+8rooZOq5kMoN0RiTvhozaiogep0rcKZAZAaDUHA40JqzWetwuCt7EywGRNw+6i7d
+nfL1OeGurUXKwqA2spEKDiEuMveX/MSmEL8WG1TuFKNT8nsJ1W1MO5afbtLcMEQG
+BSnRk1uQtjU3M3hXPw0j8UfafmrTkNrZ158fx9Nf721hMLn9e0Jf1lJO8j4Z9+Ta
+MN39sMQLOS2Fjl8sNxEfuUpmtiMCbAn+aBm1tu/rIQKBgQDCcP6z1dNWq+Y5gIUx
+oieY0/2GgnuT9rEoU3KeQV9DJvx80CDkhdTgBPOdL5HJEjGwmfDi7zsOg3maNGhY
+Wsho5/pBOa1lXASOpafCEup2lPnQhvu3H4GcqeQD8Zqp7k2Y3CsHHU11Bd9kXAMV
+w2xBl/5WQ0OFKFVzX7gmdmCwnwKBgQDAuBMYYzneH8OG/mtv0FYopT5mk0DRSMM5
+9nIXPOVCqI6aDPnySfAkbVCg/1W9AkoBg2WSxz+Xmt+oU2Hd7QDHKWjbo36WR0Sj
+IU13QG9u/bRLHrOdyhxzRw05vt+bfJqQHhUzksoaDX0TNJoONztcUuIJpO523gpR
+v/aZ4cD7MQKBgEdjsUBZ25RQ3OBz3XNRs/QasVS3h6PVyUmjCcws+Erxf3Zb/Ber
+Q3NUnhUyJ/aJJZFPk+/eIfK8NuN1JnJ6MmbB9VIJWS6D0HCHRcatp0QOgoIbbUPY
+33+jqMIB7OVDR14+R9X+3jd/BnwUhFVzQMX8hjcpzxqOqoEHvdbxU6LFAoGBALUM
+OOQwU6zZKlcnrMbechK9KmIy9DGoqb9KRuSN0NNOhqkyh52W2INgLt8RAPsPq3bA
+eivqA1PpqzP3IXnbrV9tB5VPgxyq11BpeN0PK6CZt0bbEOKrfQ7PMR2Os4LfDFVX
+7ZMF09el1Fq2kAPK33lcY/2rdFs3PXqPXJwz+ZgBAoGAfJFQn39co3qa/k9MJvZK
+Hsx/OUbWfdrn4d/Nn/SZD2m4wus/x+IZOqCqY42QJb3esFY5RFfXIuWPAFWwMWsh
+qtYACG/BuJusExpF9QZ1xzh3It9InYsd8AfSzNmnBCYNDSS4/U3H1DdFyeKF+hsw
+tPSHs8VHYIwH7kmrADwj2iw=
+-----END PRIVATE KEY-----`
     }
-]
+
+var exampleUser2 = {
+    "public": `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4z7tjQT/Vnbd9wDWsD55
++p/s51bmAKz9diyMyVGpFDmRb1woN12A0DB0FtbCrp3Uq9s+IG0S1vZGXYLEfJs5
+bp9/w9Ha7Yd+W61t+pyeUlXUlvD+dBQeD7EHSPnmb743hGEn8bwxJvOK8HV+RbC+
+6LkDyaQmdqeCPSwLGscLc+m571JDIDBY83bbfKJs4CZy86ylRWlTrFX7/lZsrQgE
+84NUrxsraGgTdc/rDMrDrL45k2zwfy/r7e1ENi5WS/qz+Lw3IRrUwNcxrrokE1m3
+pyVRcy19pQdQdTyQq4Ll+Uzb+pJ72vqsPDroJ+SEua8LyroRjrn42wrqdVR1Njl8
+CwIDAQAB
+-----END PUBLIC KEY-----`,
+"private": `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDjPu2NBP9Wdt33
+ANawPnn6n+znVuYArP12LIzJUakUOZFvXCg3XYDQMHQW1sKundSr2z4gbRLW9kZd
+gsR8mzlun3/D0drth35brW36nJ5SVdSW8P50FB4PsQdI+eZvvjeEYSfxvDEm84rw
+dX5FsL7ouQPJpCZ2p4I9LAsaxwtz6bnvUkMgMFjzdtt8omzgJnLzrKVFaVOsVfv+
+VmytCATzg1SvGytoaBN1z+sMysOsvjmTbPB/L+vt7UQ2LlZL+rP4vDchGtTA1zGu
+uiQTWbenJVFzLX2lB1B1PJCrguX5TNv6knva+qw8Ougn5IS5rwvKuhGOufjbCup1
+VHU2OXwLAgMBAAECggEARN+ysdX86aDXP2CysPIOmEZWT/tHdJb5rxJrjSzB2Q5l
+pOHCkp01SGQXG0D1+mR9q6SkXMGSPzKfOwJCOR32ty+CUsBM4Ub6piCXP6iuV3gK
+GcFq7ZWXUtwtwBF1pRJ60xV7PMnz/8E6sAx8O/UIt5Izsq6ctcOpNo8dwnznXLa8
+nIa40kNbPdcN/ILW+wpxwCh3s3GoNDu45jmBteimZa8Hk94rhaXBS1nV2dVe2+wM
+a6VxlS5k+cWXXWvu7dyQo2WjAf8D1LkwczTnlPYoGLg4tzuzslkLdA94InQV1YkD
+xxxSdq3MikmTSSXSAUljnVdS4pItzy6prbtIb7+a+QKBgQD/7xkwL9vXLw5BIfQ2
+cv5inItO/Xk1OvkRkbPMGDOEMwDWa3ilRGBRi/mlmo8gwWpYVGz9f/tCjw9eF/Td
+oMRnTyzXN0z/ZtflyEOturtAsBmFEWIe9+kL36vHFs0aO25tuZmMRc/svu1ue99v
+E6ZxP2L4BUrVHPNG2a3KZA0ULQKBgQDjTe9chKi5r9xhcfWBFvreB5S2+6J8A2AS
+Vw4XMyUnZKmN4tjbIOHKEgITcaZuxPx3lDgJO+jqRhnhFB3BzLCDO1lKSp7bmxHn
+qbc3O+T2fwa6R+9ku6wlC5WoHGvDCLnZhXjsCdQO/wWQbGBLATND4w8GinbhbXug
+0a3h7k7cFwKBgCpmCM0z0H6oe/sMTfHLQRtDBc0TLsZDu8lOUvPnunkXHfdnnHf8
+iNxZjQUDQtzRTfXOHrQsRIq1On2DCHzCyma29h29OpNBDVkywQuB2M2RntitlYy9
+0yy1ZDa6L0Y+PEAPNEHJuvVkd98KxGwZXER8lL+z2L7Pafn9y82wn34NAoGBAIja
+iXzomjWCPmulEy0vyscXRWCOTJvh5FvmciNhtcLsBnHY3LvCJm9lPD68tHoIvAC7
+Cqn0mh1DK52qYOgn9zZr6yyhlNefm74hHqBwvT/z5vcNDINXwyNiwC5BPlhkzpC6
+nb1vhW+p942m0qsWA+mhsZA8marMIh0HYWuf8XbtAoGBAIllPfNeJjPnkxmYJyVK
+rs80RShms63GRlmuctUCSe0qpxw449EZGEdiUwjtmjpAkObUkFB9EkhzIU/IxAmH
+iCXxLNWgcp1KPUWv98VqpoCM56/+JJ90hEgFutuloBCFWitozCkZgvQ6//Yi4Piu
+/8VYL4cnrdtJndERMG10ETuA
+-----END PRIVATE KEY-----`
+}
 
 var selfKeys = {
     "public": `-----BEGIN PUBLIC KEY-----
@@ -81,29 +120,6 @@ XV8Kus7y57J+zxF9jfyP76PQ
 }
 
 var activeChats = [ // this will be updated by the client to add new chats
-    {
-        "destinationServers": ["192.168.1.1", "192.168.1.1", "192.168.1.2"],
-        "participantKey": ["rsakey1", "rsakey2", "rsakey3"], // actual public keys of each participant
-        "participantDigest": "Q+6fz2lL2yQDOM7U7lAtkQ==" // list of participant public keys, sorted, joined, hashed, then b64'd
-    },
-    {
-        "destinationServers": ["192.168.1.2"],
-        "participantKey": [`-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1KZRFjZs2cbrOpj64U5P
-AwGJrl/dyCZKyg8i+bMDKpL1HnLleFnYNW2PoLZH1c9M+wW/CaqU8S2rVlPNiAzT
-3gdG5+kdgo9Dop+YTN7XWFXfuTKQ6kE9QFfsX+HVBGu5rHb8qdQFwsDAOoVrlRH+
-pOWvJd1TW6rn00qnTq3foPdnVzEpUasfmydBgTZMvk48HgJHTCU+r78g/5ZfDv16
-/8ukKn1KEqvcB2aoM+fXY0RxvrQYcL6wK16f3v4JdA9MSb0Eb53lzw96b9lyfGtV
-P5gNRhqeoHmeQ4Ms3kBhPkKoIb+2Kqe18piAvyNOjaiYODBDz++bZ9l6ao0zMY15
-SwIDAQAB
------END PUBLIC KEY-----`],
-        "participantDigest": "R/GsfSEVhCrHWvrGvW+fEQ=="
-    },
-    {
-        "destinationServers": ["192.168.1.1"],
-        "participantKey": ["rsakey3"],
-        "participantDigest": "78+3guWNvj5uUe6yBBqn4w=="
-    }
 ]
 
 var selectedChat = -1; // global is default
@@ -113,10 +129,6 @@ var socket;
 
 function connectToServer(server) {
     socket = new WebSocket(`ws://${server}:8765`)
-
-    socket.addEventListener("open", (event) => { // Connection opened
-        socket.send("Hello Server!");
-    });
 
     socket.addEventListener("message", (event) => { // Listen for messages
         console.log("Message from server ", event.data);

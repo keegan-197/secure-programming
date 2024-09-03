@@ -1,52 +1,16 @@
-messages = { // temporary list of messages
-    "global": [
-        {
-            "sender": "rsakey1",
-            "message": "first message"
-        }
-    ],
-    "Q+6fz2lL2yQDOM7U7lAtkQ==": [
-        {
-            "sender": "rsakey1",
-            "message": "first message"
-        },
-        {
-            "sender": "rsakey1",
-            "message": "second message"
-        },
-        {
-            "sender": "rsakey2",
-            "message": "first message"
-        },
-        {
-            "sender": "rsakey3",
-            "message": "first message"
-        }
-    ],
-    "R/GsfSEVhCrHWvrGvW+fEQ==": [
-        {
-            "sender": "MIIBI",
-            "message": "first message"
-        },
-        {
-            "sender": "MIIBI",
-            "message": "second message"
-        },
-        {
-            "sender": "MIIBI",
-            "message": "third message"
-        }
-    ],
+messages = {
 }
 
 // update the client's locally stored keys
 // this happens whenever client writes in the key spaces, or when they send the hello to the server
-function updateKeys() {
+async function updateKeys() {
     let pub = document.getElementById('pub-entry').value;
     let priv = document.getElementById('priv-entry').value;
+    let digest = await sha256Digest(pub);
 
     selfKeys["public"] = pub;
     selfKeys["private"] = priv;
+    selfKeys["digest"] = digest;
     console.log("Updated keys");
 }
 
@@ -109,7 +73,7 @@ function updateMessagesUI() {
     let chatKey = getCurrentChatKey();
 
     if (messages[chatKey] == undefined) {
-        messages[chatKey] = []
+        messages[chatKey] = [];
     }
 
     for (let message of messages[chatKey]) { // for each message in the current message group
@@ -166,16 +130,16 @@ function updateActiveUsersList() {
         
         table.appendChild(tr); // add the tr to the table        
 
-        for (digest in server["digest"]) {
+        for (digest in server["digests"]) {
             let td = document.createElement('td'); // create a new th
-            td.innerText = server["digest"][digest];
+            td.innerText = server["digests"][digest];
             
             let tr = document.createElement('tr'); // create a new tr
             tr.appendChild(td); // add the th to the tr
             
             
             // tr.setAttribute('onclick', `startChat()`); // give it an onclick to select it
-            tr.setAttribute('onclick', `startChat(["${server['address']}", "${server['clients'][digest]}", "${server["digest"][digest]}"])`); // give it an onclick to select it
+            tr.setAttribute('onclick', `startChat([\`${server['address']}\`, \`${server['clients'][digest]}\`, \`${server["digests"][digest]}\`])`); // give it an onclick to select it
             table.appendChild(tr); // add the tr to the table
         }
     }
@@ -193,11 +157,13 @@ async function startChat(user_rsa) {
             }
         }
         
+        let participantDigests = [selfKeys["digest"], await sha256Digest(user_rsa[1])];
+        
         // create a new chat and push it into the chats
         let new_chat = {
             "destinationServers": [user_rsa[0]],
             "participantKey": [selfKeys["public"], user_rsa[1]],
-            "participantDigest": user_rsa[2]
+            "participantDigest": await sha256Digest(participantDigests)
         }
         activeChats.push(new_chat);
     } else {
@@ -214,9 +180,13 @@ async function startChat(user_rsa) {
 
         // otherwise add the user to the new group
         new_chat["participantKey"].push(user_rsa[1]);
-        
+        let digestedKeys = [];
+        for (let participantKey of new_chat["participantKey"]) {
+            digestedKeys.push(await sha256Digest(participantKey));
+        }
+
         // create a fingerprint of the group
-        let digest = await sha256Digest(new_chat["participantKey"]);
+        let digest = await sha256Digest(digestedKeys);
         
         // loop through the group and check if we already have the group added
         for (let activeChat of activeChats) {
