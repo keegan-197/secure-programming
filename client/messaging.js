@@ -238,10 +238,53 @@ async function addChatToDOM(chat) {
     updateMessagesUI();
 }
 
+async function uploadFile() {
+
+    // get the data from the file
+    const fileSelect = document.getElementById('file');
+    const file = fileSelect.files[0];
+
+    if (!file) {
+        alert("Please select a file.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        // create a XMLHttpRequest object
+        let req = new XMLHttpRequest();
+        // open a POST request to the server
+        // port subject to change
+        req.open("POST", `http://${selfKeys["server"]}:8764`, true);
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                console.log("ready");
+                
+                if (req.status == 200) { // 200 means the server responds with the file url
+                    alert(JSON.parse(req.responseText)["body"]["file_url"]);
+                    console.log(req.responseText);
+                } else if (req.status == 413) { // 413 means the upload was too large
+                    console.log("File too large");
+                } else { // other errors
+                    console.log("File upload failed");
+                }
+            }
+        }
+        // send the request
+        req.send(formData);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while uploading the file.');
+    }
+
+}
+
 // send hello
 function sendHello() {
-    updateKeys();
-    sendData({"type": "hello", "public_key": selfKeys["public"]});
+    let serverAddress = document.getElementById("server-entry").value;
+    connectToServer(serverAddress);
 }
 
 // send client_list_request

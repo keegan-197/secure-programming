@@ -77,6 +77,9 @@ p {
 
 .messagetable {
     width: 100%;
+    text-align: left;
+    font-weight: lighter;
+    font-family: monospace;
 }
 
 .user {

@@ -11,6 +11,10 @@ async function generateAESKey() {
 
 async function sha256Digest(data) { // create a digest from a piece of data
     console.log(`Digesting data: ${data}`);
+    if (data == undefined || data.length == 0) {
+        return undefined;
+    }
+
     if (typeof(data) == "object") { // if data is a list, sort and join it before fingerprinting
         data = data.sort().join();
     }

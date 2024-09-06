@@ -1,6 +1,8 @@
 # add input for private and public keys
 # button to send the hello to server
 
+# server selection
+
 message receive handling
  - checking data nonce?
  - checking message signature
@@ -13,14 +15,14 @@ message receive handling
 #  - button to refresh active users
   # - sends client_list request
   # - handle client_list response
-include self in chat participants
- - add the value when hello sent?
+#include self in chat participants
+# - add the value when hello sent?
 #  - connect to server on hello sent?
 
 update sendData to include the counter, signature, type
 
 
-all file transfer stuff
+# all file transfer stuff
 
-float chat messages left
-message length concatenation
+# float chat messages left
+# message length concatenation
