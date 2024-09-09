@@ -1,13 +1,19 @@
+hello handling
+nonce initialization
+nonce storage
+
+handle all open TODO
+
 # add input for private and public keys
 # button to send the hello to server
 
 # server selection
 
-message receive handling
- - checking data nonce?
- - checking message signature
- - generating message signature
- - generating data nonce
+#message receive handling
+# - checking data nonce?
+# - checking message signature
+# - generating message signature
+# - generating data nonce
 #  - actually putting the message in the messages list and displaying it
 
 # global chat sending
@@ -19,7 +25,7 @@ message receive handling
 # - add the value when hello sent?
 #  - connect to server on hello sent?
 
-update sendData to include the counter, signature, type
+# update sendData to include the counter, signature, type
 
 
 # all file transfer stuff

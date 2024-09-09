@@ -60,13 +60,13 @@ async function sendChat() {
 
     // add self public key to the symmetric keys list for testing
     // TODO remove
-    if (true) {
-        let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
+    // if (true) {
+    //     let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
 
-        let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
+    //     let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
         
-        symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
-    }
+    //     symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
+    // }
 
     data = {
         "type": "chat",
@@ -76,20 +76,26 @@ async function sendChat() {
         "chat": _arrayBufferToBase64(encrypted_message) // encode the encrypted chat message as b64
     }
 
-    console.log(data);
+    // console.log(data);
     
     sendData(data);
 }
 
-function sendData(data) {
+async function sendData(data) {
+    // increase counter on all signed_data sends
+    selfKeys["counter"] += 1;
+
     // called in all data send functions
     // wraps the data with counter, signature, type as per https://github.com/xvk-64/2024-secure-programming-protocol?tab=readme-ov-file#sent-by-client
     message = {
         "type": "signed_data",
         "data": data,
-        "counter": 0, // TODO
-        "signature": 0 // TODO
+        "counter": selfKeys["counter"]
     }
+
+    let signature = await signData(JSON.stringify(message["data"]) + message["counter"], selfKeys.private);
+
+    message["signature"] = _arrayBufferToBase64(signature);
 
     sendMessage(message);
 }
@@ -124,7 +130,11 @@ function receivedMessage(message) { // handle every message received over the so
             } else if (message["data"]["type"] == "chat") {
                 // handle receiving private chat message
                 console.log("Received chat");
-                handleChat(message); 
+                handleChat(message);
+            } else if (message["data"]["type"] == "hello") {
+                // handle receving a hello
+                // handleHello(message);
+                console.log("Received hello");
             }
         }
     } else if (message["type"] == "client_list") {
@@ -149,7 +159,7 @@ async function decryptSymKeys(symm_keys) {
         try { // try to decrypt the current symm key with my priv RSA key
             dec_symm_keys = await window.crypto.subtle.decrypt(importedKeySettings, self_rsa_priv_key, unencoded_key);
         } catch (err) {
-            console.log("Couldn't decrypt any keys :(");
+            // console.log("Couldn't decrypt any keys :(");
             continue;
         }
         // if I can decrypt a symm key, then message meant for me, return the symm key
@@ -189,16 +199,36 @@ async function handleClientList(servers) {
     updateActiveUsersList();
 }
 
-function handleGlobal(message) {
-    console.log("Global message");
-    console.log(message);
+async function handleGlobal(message) {
+    // console.log("Global message");
+    // console.log(message);
+
+    let digest = message["data"]["sender"];
     let data = message["data"];
+
+    let integrity = await checkMessageIntegrity(message, digest);
+
+    if (!integrity) {
+        return;
+    }
 
     messages["global"].push({"sender": data["sender"], "message":data["message"]});
     updateMessagesUI();
 }
 
+function digestToPub(digest) {
+    // convert a digest into a public key using the activeUsers list
+    for (let server = 0; server < activeUsers.length; server++) {
+        for (let participant = 0; participant < activeUsers[server]["clients"].length; participant++) {
+            if (digest == activeUsers[server]["digests"][participant]) {
+                return activeUsers[server]["clients"][participant];
+            }
+        }
+    }
+}
+
 async function handleChat(message) {
+    
     // try to decrypt all symmetric keys
     // if can decrypt one, then the message is meant for me, use that key
     let decryptedSymmKey = await decryptSymKeys(message["data"]["symm_keys"]);
@@ -222,6 +252,17 @@ async function handleChat(message) {
         let received_chat = _arrayBufferToString(decrypted_chat);
         console.log("Received a message for me!");
         console.log(received_chat);
+        
+        let parsed = JSON.parse(received_chat);
+
+        let digest = parsed["participants"][0];
+
+        let integrity = await checkMessageIntegrity(message, digest);
+        
+        if (!integrity) {
+            return;
+        }
+
         await addChatToDOM(received_chat);
     } else { // received a message not meant for me
         console.log("Received a message not for me :(");
@@ -234,6 +275,7 @@ async function addChatToDOM(chat) {
     if (!(digest in messages)) {
         messages[digest] = [];
     }
+
     messages[digest].push({"sender":chat["participants"][0], "message":chat["message"]});
     updateMessagesUI();
 }
@@ -260,8 +302,6 @@ async function uploadFile() {
         req.open("POST", `http://${selfKeys["server"]}:8764`, true);
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
-                console.log("ready");
-                
                 if (req.status == 200) { // 200 means the server responds with the file url
                     alert(JSON.parse(req.responseText)["body"]["file_url"]);
                     console.log(req.responseText);
@@ -279,6 +319,84 @@ async function uploadFile() {
         alert('An error occurred while uploading the file.');
     }
 
+}
+
+async function signData(data, key) {
+    let signingParams = { // Signing settings
+        "name": "RSA-PSS",
+        "saltLength": 32
+    }
+
+    let importedKeySettings = { // RSA settings
+        "name": "RSA-PSS",
+        "hash": "SHA-256"
+    }
+
+    let keyBuffer = await window.crypto.subtle.importKey('pkcs8', _pemToArrayBuffer(key), importedKeySettings, true, ['sign']);
+
+    let signed = await window.crypto.subtle.sign(signingParams, keyBuffer, _stringToArrayBuffer(data));
+
+    return signed;
+}
+
+async function verifySignedData(signed_data, key) {
+    let signingParams = { // Signing settings
+        "name": "RSA-PSS",
+        "saltLength": 32
+    }
+
+    let importedKeySettings = { // RSA settings
+        "name": "RSA-PSS",
+        "hash": "SHA-256"
+    }
+
+    // load the data from the signed_data message
+    let data = JSON.stringify(signed_data["data"]) + signed_data["counter"];
+    
+    let dataBuffer = _stringToArrayBuffer(data);
+
+    // load the signature
+    let signature = _base64ToArrayBuffer(signed_data["signature"]);
+    
+    // load the key
+    let keyBuffer = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(key), importedKeySettings, true, ['verify']);
+
+    // verify
+    let verified = await window.crypto.subtle.verify(signingParams, keyBuffer, signature, dataBuffer);
+
+    return verified;
+}
+
+async function checkMessageIntegrity(message, digest) {
+    // convert digest of message sender into public key
+    // taken from the local list of clients through client_list and hello
+    let pub = digestToPub(digest);
+
+    // check counter
+    if (counters[digest] == undefined) {
+        // if first time seeing a msg from someone, start their counter
+        counters[digest] = message["counter"];
+        console.log("Setup new counter");
+    } else if (message["counter"] <= counters[digest]) {
+        // if the counter is not greater than the expected, deny message
+        console.log("Received invalid counter");
+        return false;
+    }
+    console.log("Counter check passed");
+
+    // verify the signature
+    let verified = await verifySignedData(message, pub);
+    if (!verified) {
+        console.log("Unverified message received");
+        return false;
+    }
+
+    console.log("Signature check passed");
+
+    // if correct counter and message valid, increase their counter
+    counters[digest] = message["counter"];
+    console.log("Increased counter to " + message["counter"]);
+    return true;
 }
 
 // send hello

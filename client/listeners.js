@@ -6,7 +6,7 @@ async function addListeners() {
     // pub_entry.addEventListener('input', await updateKeys);
 
     const hello = document.getElementById('hello');
-    hello.addEventListener('click', sendHello);
+    hello.addEventListener('click', () => sendHello());
 
     const fileupload = document.getElementById('fileupload');
     fileupload.addEventListener('click', uploadFile);

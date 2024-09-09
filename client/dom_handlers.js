@@ -13,6 +13,7 @@ async function updateKeys() {
     selfKeys["private"] = priv;
     selfKeys["digest"] = digest;
     selfKeys["server"] = serverValue;
+    selfKeys["counter"] = 0;
     console.log("Updated keys");
 }
 

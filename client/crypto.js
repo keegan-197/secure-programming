@@ -9,8 +9,11 @@ async function generateAESKey() {
     return [new_iv, generated_key, aes_settings]
 }
 
-async function sha256Digest(data) { // create a digest from a piece of data
+async function sha256Digest(cdata) { // create a digest from a piece of data
+    data = structuredClone(cdata);
+    
     console.log(`Digesting data: ${data}`);
+    
     if (data == undefined || data.length == 0) {
         return undefined;
     }
