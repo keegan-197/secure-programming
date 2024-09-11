@@ -4,75 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <script src="conversions.js"></script>
-    <script src="crypto.js"></script>
-    <script src="networking.js"></script>
-    <script src="messaging.js"></script>
-    <script defer src="dom_handlers.js"></script>
-    <script src="listeners.js"></script>
+    <script src="scripts/conversions.js"></script>
+    <script src="scripts/crypto.js"></script>
+    <script src="scripts/networking.js"></script>
+    <script defer src="scripts/dom_handlers.js"></script>
+    <script src="scripts/listeners.js"></script>
+    <script src="scripts/server_to_client.js"></script>
+    <script src="scripts/client_to_server.js"></script>
     <title>Secure Programming</title>
 </head>
 <body>
     <div class="textbox outlined scrollable">
-        <table class="messagetable" id="chat-messages">
-            <tr>
-                <th class="user">fingerprint1</th>
-                <th class="content">This is an example message 1</th>
-            </tr>
-            <tr>
-                <th class="user">fingerprint1</th>
-                <th class="content">This is an example message 2</th>
-            </tr>
-            <tr>
-                <th class="user">fingerprint2</th>
-                <th class="content">This is an example message 3</th>
-            </tr>
-            <tr>
-                <th class="user">fingerprint1</th>
-                <th class="content">This is an example message 4</th>
-            </tr>
-            <tr>
-                <th class="user">fingerprint2</th>
-                <th class="content">This is an example message 5</th>
-            </tr>
-        </table>
+        <table class="messagetable" id="chat-messages"></table>
     </div>
     <div class="groupbox outlined right scrollable">
-        <table class="fill" id="user-select">
-            <tr class="selected">
-                <th>global</th>
-            </tr>
-            <tr>
-                <th>chat 1</th>
-            </tr>
-            <tr>
-                <th>chat 2</th>
-            </tr>
-            <tr>
-                <th>chat 3</th>
-            </tr>
-            <tr>
-                <th>chat 4</th>
-            </tr>
-            <tr>
-                <th>chat 5</th>
-            </tr>
-            <tr>
-                <th>chat 6</th>
-            </tr>
-            <tr>
-                <th>chat 7</th>
-            </tr>
-            <tr>
-                <th>chat 8</th>
-            </tr>
-            <tr>
-                <th>chat 9</th>
-            </tr>
-        </table>
+        <table class="fill" id="user-select"></table>
     </div>
     <div class="outlined right">
-        <span>
+        <!-- <span>
             <p class="keyentry-tag left">Public: </p>
             <textarea type="text" class="keyentry right" id="pub-entry"></textarea>
         </span>
@@ -81,7 +30,7 @@
             <p class="keyentry-tag left">Private: </p>
             <textarea type="text" class="keyentry right" id="priv-entry"></textarea>
         </span>
-        <br>
+        <br> -->
         <span>
             <p class="keyentry-tag left">Address: </p>
             <textarea type="text" class="keyentry right" id="server-entry"></textarea>
@@ -90,92 +39,7 @@
     </div>
     <div class="groupbox outlined right">
         <div class="scrollable vfill">
-            <table class="fill" id="active-users">
-                <tr>
-                    <th>server1</th>
-                </tr>
-                <tr>
-                    <td>user1</td>
-                </tr>
-                <tr>
-                    <td>user2</td>
-                </tr>
-                <tr>
-                    <td>user3</td>
-                </tr>
-                <tr>
-                    <th>server2</th>
-                </tr>
-                <tr>
-                    <td>user4</td>
-                </tr>
-                <tr>
-                    <td>user 5</td>
-                </tr>
-                <tr>
-                    <th>server1</th>
-                </tr>
-                <tr>
-                    <td>user1</td>
-                </tr>
-                <tr>
-                    <td>user2</td>
-                </tr>
-                <tr>
-                    <td>user3</td>
-                </tr>
-                <tr>
-                    <th>server2</th>
-                </tr>
-                <tr>
-                    <td>user4</td>
-                </tr>
-                <tr>
-                    <td>user 5</td>
-                </tr>
-                <tr>
-                    <th>server1</th>
-                </tr>
-                <tr>
-                    <td>user1</td>
-                </tr>
-                <tr>
-                    <td>user2</td>
-                </tr>
-                <tr>
-                    <td>user3</td>
-                </tr>
-                <tr>
-                    <th>server2</th>
-                </tr>
-                <tr>
-                    <td>user4</td>
-                </tr>
-                <tr>
-                    <td>user 5</td>
-                </tr>
-                <tr>
-                    <th>server1</th>
-                </tr>
-                <tr>
-                    <td>user1</td>
-                </tr>
-                <tr>
-                    <td>user2</td>
-                </tr>
-                <tr>
-                    <td>user3</td>
-                </tr>
-                <tr>
-                    <th>server2</th>
-                </tr>
-                <tr>
-                    <td>user4</td>
-                </tr>
-                <tr>
-                    <td><Button>user 5</td>
-                </tr>
-            </table>
+            <table class="fill" id="active-users"></table>
         </div>
         <div>
             <button class="center fill" onclick="refreshActive()">Refresh</p>

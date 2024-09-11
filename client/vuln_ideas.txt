@@ -1,0 +1,16 @@
+- innerHTML instead of innerText to allow XSS
+ - simple xss 
+
+ - send messages from the target through the XSS
+ - perhaps upload files through XSS?
+ - upload file to server, send target link, do something on click?
+  - sending all messages?
+ - expand on XSS with insecure private key
+  - use xss to send exported private key
+  - extractable true instead of false in rsa key gen function
+
+- file upload
+ - if file names not randomised, overwrite someone elses file
+ - if file names are not randomised and use a small amount of values, can (maybe) crack random seed, find future values and therefore retrieve others' files
+ 
+ 
