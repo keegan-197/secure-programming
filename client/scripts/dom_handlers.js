@@ -149,7 +149,7 @@ function updateActiveUsersList() {
     table.innerHTML = "";
 
     // for every server in the client_list, create a new th
-    for (server of activeUsers) {
+    for (let server of activeUsers) {
         let th = document.createElement('th'); // create a new th (header)
         th.innerText = server["address"];
         
@@ -158,7 +158,7 @@ function updateActiveUsersList() {
         
         table.appendChild(tr); // add the tr to the table (add row into table)
 
-        for (client in server["digests"]) {
+        for (let client in server["digests"]) {
             let td = document.createElement('td'); // create a new th
             td.innerText = server["digests"][client];
             
