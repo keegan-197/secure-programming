@@ -26,8 +26,9 @@ async function updateKeys() {
     selfKeys["private"] = newKeyPair["private"];
     selfKeys["public"] = newKeyPair["public"];
     selfKeys["pemPublic"] = _arrayBufferToPem(selfKeys["public"], 0);
-
+    selfKeys["iv"] = window.crypto.getRandomValues(new Uint8Array(16));
     selfKeys["digest"] = await sha256Digest(selfKeys["pemPublic"]);
+    selfKeys["aes-key"] = await generateAESKey(); // generate an iv, key, and settings for AES encryption
 
     selfKeys["counter"] = 0;
     console.log("Updated keys");
@@ -153,10 +154,10 @@ function updateActiveUsersList() {
         let th = document.createElement('th'); // create a new th (header)
         th.innerText = server["address"];
         
-        let tr = document.createElement('tr'); // create a new tr (row)
-        tr.appendChild(th); // add the th to the tr (add header into row)
+        let serverRow = document.createElement('tr'); // create a new tr (row)
+        serverRow.appendChild(th); // add the th to the tr (add header into row)
         
-        table.appendChild(tr); // add the tr to the table (add row into table)
+        table.appendChild(serverRow); // add the tr to the table (add row into table)
 
         for (let client in server["digests"]) {
             let td = document.createElement('td'); // create a new th
@@ -168,12 +169,15 @@ function updateActiveUsersList() {
             // potentially vulnerable below
             // tr.setAttribute('onclick', `startChat([\`${server['address']}\`, \`${server['clients'][client]}\`, \`${server["digests"][client]}\`])`);
             tr.addEventListener('click', () => startChat([server['address'], server['clients'][client], server['digests'][client]])); // give it an click event listener to select it
+            console.log(`Adding event listener ${[server['address'], server['clients'][client], server['digests'][client]]}`);
+            
             table.appendChild(tr); // add the tr to the table
         }
     }
 }
 
 async function startChat(user_rsa) {
+    console.log(`Starting new chat with ${user_rsa}`);
     // starts a new chat group when the client clicks a user in the client_list
 
     if (selectedChat == -1 ) {
@@ -211,7 +215,7 @@ async function startChat(user_rsa) {
 
         // if the selected group already has the user in it, do nothing
         if (new_chat["participantKey"].includes(user_rsa[1])) {
-            console.log("Group already exists");
+            console.log("Group already exists 1");
             return;
         }
 
@@ -230,7 +234,7 @@ async function startChat(user_rsa) {
         // loop through the group and check if we already have the group added
         for (let activeChat of activeChats) {
             if (activeChat["participantDigest"] == digest) {
-                console.log("Group already exists");
+                console.log("Group already exists 2");
                 return;
             }
         }
