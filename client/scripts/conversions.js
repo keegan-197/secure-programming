@@ -1,3 +1,10 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 // helper functions to vonvert between types
 // can mostly ignore
 

@@ -1,3 +1,10 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 var messages = {}; // will store the received messages
 // no persistent storage for messages
 

@@ -1,3 +1,6 @@
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
 # Usage
 
 ## Starting the server
@@ -16,7 +19,6 @@ Open the index.html
 Pressing the `Connect` button will connect to the server specified in the address box
 
 - This generates an RSA key pair and sets up your client with it, you do not need to enter your own key pair
-- This is potentially a negative, but its fine for now
 
 Before sending or receiving messages, you need to update the client list with the `Refresh` button
 

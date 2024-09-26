@@ -1,4 +1,9 @@
+/*
 
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
 
 var socket;
 

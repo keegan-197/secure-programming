@@ -1,3 +1,10 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 async function generateAESKey() {
     // generate an IV, AES key, and settings object
     let aes_settings = { name: "AES-GCM", iv: selfKeys["iv"], length: 256 };
