@@ -30,7 +30,7 @@ async function sha256Digest(cdata) { // create a digest from a piece of data
 
     // essentially fingerprints the data
     let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(data));
-    let bytes = new Uint16Array(digest);
+    let bytes = new Uint8Array(digest);
     let b64 = _arrayBufferToBase64(bytes);
     console.log(`Returning: ${b64}`);
     return b64;
