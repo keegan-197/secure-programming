@@ -1,3 +1,5 @@
+# THIS CODE IS VULNERABLE, USE AT YOUR OWN RISK
+
 Group 8
 Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
 
