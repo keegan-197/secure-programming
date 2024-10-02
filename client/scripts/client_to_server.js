@@ -122,7 +122,9 @@ async function uploadFile() {
         let req = new XMLHttpRequest();
         // open a POST request to the server
         // port subject to change
-        req.open("POST", `http://${selfKeys["server"]}:8764`, true);
+        req.open("POST", `http://${selfKeys["server"].split(":")[0]}:8080`, true);
+        req.setRequestHeader("x-filename", file.name);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
                 if (req.status == 200) { // 200 means the server responds with the file url
