@@ -7,7 +7,7 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
 
 ## Starting the server
 
-Install openjdk version "23" 2024-09-17
+Install openjdk version "23" 2024-09-17 https://jdk.java.net/23/
 
 Run `javac -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar" server/*.java` in powershell in the base folder
 
