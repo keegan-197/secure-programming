@@ -1,0 +1,10 @@
+[
+    {
+        "address": "ws://localhost:9821",
+        "public_key": ""
+    },
+    {
+        "address": "ws://localhost:9822",
+        "public_key": ""
+    }
+]
