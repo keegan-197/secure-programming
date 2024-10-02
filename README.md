@@ -9,9 +9,13 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
 
 Install openjdk version "23" 2024-09-17
 
-Run 'javac -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar" server/*.java' in powershell in the base folder
-Run 'java -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]' in powershell in the base folder
-    !Note: the files server is always on port 8080!
+Run `javac -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar" server/*.java` in powershell in the base folder
+
+Run `java -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]` in powershell in the base folder
+- !Note: the files server is always on port 8080!
+
+If you already have an installed Java version, you can try using the full path. E.g. enter the following in powershell `& "C:\Program Files\Java\jdk-23\bin\java.exe" -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]`
+
 To connect multiple clients, replace address in servers/servers.json with the desired address
 
 ## Starting the client
