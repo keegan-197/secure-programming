@@ -1,4 +1,9 @@
+/*
 
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
 
 var socket;
 
@@ -10,7 +15,7 @@ async function connectToServer(server) {
         socket.close();
     }
 
-    socket = new WebSocket(`ws://${server}:8765`)
+    socket = new WebSocket(`ws://${server}`)
 
     socket.addEventListener("message", (event) => { // Listen for messages
         console.log("Message from server ", event.data);

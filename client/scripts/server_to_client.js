@@ -1,3 +1,10 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 function receivedMessage(message) { // handle every message received over the socket
     try {
         message = JSON.parse(message); // try to parse the data

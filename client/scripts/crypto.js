@@ -1,12 +1,17 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 async function generateAESKey() {
     // generate an IV, AES key, and settings object
-    let new_iv = window.crypto.getRandomValues(new Uint8Array(16));
-
-    let aes_settings = { name: "AES-GCM", iv: new_iv, length: 256 };
+    let aes_settings = { name: "AES-GCM", iv: selfKeys["iv"], length: 256 };
 
     let generated_key = await window.crypto.subtle.generateKey(aes_settings, true, ["encrypt", "decrypt"]);
 
-    return [new_iv, generated_key, aes_settings]
+    return [generated_key, aes_settings]
 }
 
 async function sha256Digest(cdata) { // create a digest from a piece of data
@@ -25,7 +30,7 @@ async function sha256Digest(cdata) { // create a digest from a piece of data
 
     // essentially fingerprints the data
     let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(data));
-    let bytes = new Uint16Array(digest);
+    let bytes = new Uint8Array(digest);
     let b64 = _arrayBufferToBase64(bytes);
     console.log(`Returning: ${b64}`);
     return b64;

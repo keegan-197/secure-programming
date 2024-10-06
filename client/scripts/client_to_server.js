@@ -1,3 +1,10 @@
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 async function sendChat() {
     // called when user sends chat
     // needs to send chat to their server as per https://github.com/xvk-64/2024-secure-programming-protocol?tab=readme-ov-file#chat
@@ -13,7 +20,11 @@ async function sendChat() {
         return;
     }
 
-    let [new_iv, generated_key, aes_settings] = await generateAESKey(); // generate an iv, key, and settings for AES encryption
+
+
+    let [generated_key, aes_settings] = selfKeys["aes-key"] // load the aes key
+    
+    
     let exported_key = await window.crypto.subtle.exportKey('raw', generated_key); // export the generated key
     let b64ExportedKey = _arrayBufferToBase64(exported_key);
 
@@ -43,17 +54,22 @@ async function sendChat() {
     // add self public key to the symmetric keys list for testing
     // TODO remove
     // if (true) {
-    //     let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
+    //     let participant_rsa_key = await window.crypto.subtle.iportKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
 
     //     let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
         
     //     symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
     // }
 
+    console.log(`${strChatObj}`)
+    console.log(new Uint8Array(encrypted_message));
+    console.log(`chat before sending (B64) ${_arrayBufferToBase64(encrypted_message)}`);
+    
+
     data = {
         "type": "chat",
         "destination_servers": activeChats[selectedChat]['destinationServers'],
-        "iv": _arrayBufferToBase64(new_iv), // each message needs a new IV, encoded in b64
+        "iv": _arrayBufferToBase64(selfKeys["iv"]), // each message needs a new IV, encoded in b64
         "symm_keys": symm_keys, // each participant in each message needs a new symmetric key (from the iv)
         "chat": _arrayBufferToBase64(encrypted_message) // encode the encrypted chat message as b64
     }
@@ -106,7 +122,9 @@ async function uploadFile() {
         let req = new XMLHttpRequest();
         // open a POST request to the server
         // port subject to change
-        req.open("POST", `http://${selfKeys["server"]}:8764`, true);
+        req.open("POST", `http://${selfKeys["server"].split(":")[0]}:8080`, true);
+        req.setRequestHeader("x-filename", file.name);
+        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
                 if (req.status == 200) { // 200 means the server responds with the file url
