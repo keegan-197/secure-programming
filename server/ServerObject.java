@@ -8,6 +8,13 @@ import java.util.LinkedList;
 import org.json.JSONObject;
 import java.net.*;
 
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 public class ServerObject
 {
 	private String public_key;

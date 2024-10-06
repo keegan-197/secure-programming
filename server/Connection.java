@@ -8,6 +8,13 @@ import org.json.JSONException;
 
 import java.util.*;
 
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 public class Connection extends Thread
 {
 	private static Vector<ServerObject> servers;

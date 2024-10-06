@@ -14,6 +14,13 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 public class Server extends WebSocketServer
 {
 	private static Vector<ServerObject> servers = new Vector<ServerObject>();

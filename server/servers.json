@@ -1,10 +1,10 @@
 [
     {
-        "address": "ws://localhost:9821",
+        "address": "ws://localhost:8765",
         "public_key": ""
     },
     {
-        "address": "ws://localhost:9822",
+        "address": "ws://localhost:8766",
         "public_key": ""
     }
 ]

@@ -9,6 +9,13 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 public class FileHandler implements HttpHandler
 {
     public void handle(HttpExchange exchange) throws IOException

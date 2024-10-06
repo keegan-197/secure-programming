@@ -2,6 +2,13 @@ import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpServer;
 
+/*
+
+Group 8
+Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
+
+*/
+
 public class FileServer extends Thread
 {
 	FileServer()
