@@ -275,6 +275,8 @@ async function generateChatObj() { // generate a chat object from the input box
         "participants": participants,
         "message": document.getElementById("chatbox").value
     };
+
+    document.getElementById("chatbox").value = "";
     
     return chat;
 }
