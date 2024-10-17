@@ -103,7 +103,7 @@ function updateMessagesUI() {
 
     for (let message of messages[chatKey]) { // for each message in the current message group
         let th = document.createElement('th'); // create a new th
-        th.innerHTML = message['sender'] + " " + insertCharEveryN(message['message'], "\n", 150); // set the content to the message
+        th.innerText = message['sender'] + ": " + insertCharEveryN(message['message'], "\n", 150); // set the content to the message
 
         let tr = document.createElement('tr'); // create a new tr
         tr.appendChild(th); // append the th to the tr
