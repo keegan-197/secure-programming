@@ -42,28 +42,13 @@ async function sendChat() {
     let symm_keys = []
 
     // encrypt an AES key with every participants RSA public key
-    for (let participant of activeChats[selectedChat]['participantKey']) {
+    for (let participant of activeChats[selectedChat]['participantKey'].slice(1)) {
         let participant_rsa_key = await window.crypto.subtle.importKey('spki', _pemToArrayBuffer(participant), importedKeySettings, true, ['encrypt']) // import participant RSA key
 
         let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
         
         symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
-    }
-
-    // add self public key to the symmetric keys list for testing
-    // TODO remove
-    // if (true) {
-    //     let participant_rsa_key = await window.crypto.subtle.iportKey('spki', _pemToArrayBuffer(selfKeys["public"]), importedKeySettings, true, ['encrypt']) // import participant RSA key
-
-    //     let encrypted_aes_key = await window.crypto.subtle.encrypt(importedKeySettings, participant_rsa_key, _stringToArrayBuffer(b64ExportedKey)); // encrypt the AES key with participant AES key
-        
-    //     symm_keys.push(_arrayBufferToBase64(encrypted_aes_key)); // add the b64 encoded, RSA encrypted AES key to the symm_keys list
-    // }
-
-    console.log(`${strChatObj}`)
-    console.log(new Uint8Array(encrypted_message));
-    console.log(`chat before sending (B64) ${_arrayBufferToBase64(encrypted_message)}`);
-    
+    }    
 
     data = {
         "type": "chat",
