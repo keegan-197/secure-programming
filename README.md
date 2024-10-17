@@ -9,12 +9,24 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
 
 Install openjdk version "23" 2024-09-17 https://jdk.java.net/23/
 
-Run `javac -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar" server/*.java` in powershell in the base folder
+Run 
+- `javac -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar" server/*.java` on Windows systems
+- `javac -cp ".:server/jars/json-20240303.jar:server/jars/Java-WebSocket-1.5.7.jar:server/jars/slf4j-api-2.0.6.jar" server/*.java` on Unix systems
 
-Run `java -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]` in powershell in the base folder
-- !Note: the files server is always on port 8080!
+in powershell in the base folder to compile the server
 
-If you already have an installed Java version, you can try using the full path. E.g. enter the following in powershell `& "C:\Program Files\Java\jdk-23\bin\java.exe" -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]`
+
+Run 
+- `java -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]` on Windows systems
+- `java -cp ".:server/jars/json-20240303.jar:server/jars/Java-WebSocket-1.5.7.jar:server/jars/slf4j-api-2.0.6.jar:server" Server [port]` on Unix systems
+
+in powershell in the base folder to run the server
+
+
+- !Note: the files server is always on port 8080, this means that you cannot use 8080 as the port for the WebSocket server
+
+
+If you already have an older installed Java version, you can try using the full path. E.g. enter the following in powershell `& "C:\Program Files\Java\jdk-23\bin\java.exe" -cp ".;server/jars/json-20240303.jar;server/jars/Java-WebSocket-1.5.7.jar;server/jars/slf4j-api-2.0.6.jar;server" Server [port]`
 
 To connect multiple clients, replace address in servers/servers.json with the desired address
 
