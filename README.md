@@ -1,8 +1,11 @@
-# THIS CODE IS VULNERABLE, USE AT YOUR OWN RISK
-
+# THIS BRANCH HAS BEEN CLEARED OF VULNERABILITIES
+Switch to the vulnerable branch to view the vulnerabilities we implemented
+#
+#
 Group 8
 Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
-
+#
+#
 # Usage
 
 ## Starting the server
