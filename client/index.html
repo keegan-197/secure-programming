@@ -29,8 +29,8 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
     </div>
     <div class="outlined right">
         <span>
-            <p class="keyentry-tag left">Address: </p>
-            <textarea type="text" class="keyentry right" id="server-entry"></textarea>
+            <p class="keyentry-tag left">Server: </p>
+            <input type="text" class="keyentry right" id="server-entry" placeholder="address:port" value="localhost:8008"></textarea>
         </span>
         <button id="hello">Connect</button>
     </div>
@@ -39,7 +39,7 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
             <table class="fill" id="active-users"></table>
         </div>
         <div>
-            <button class="center fill" onclick="refreshActive()">Refresh</p>
+            <button class="center fill" onclick="refreshActive()">Refresh</button>
         </div>
     </div>
     <input type="text" id="chatbox" onkeypress="chatKeyPressed(event)">
