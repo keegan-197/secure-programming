@@ -18,7 +18,7 @@ async function connectToServer(server) {
     socket = new WebSocket(`ws://${server}`)
 
     socket.addEventListener("message", (event) => { // Listen for messages
-        console.log("Message from server ", event.data);
+        // console.log("Message from server ", event.data);
         receivedMessage(event.data); // handle every message received
     });
 

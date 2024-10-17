@@ -18,7 +18,7 @@ async function generateAESKey() {
 async function sha256Digest(cdata) { // create a digest from a piece of data
     data = structuredClone(cdata);
     
-    console.log(`Digesting data: ${data}`);
+    // console.log(`Digesting data: ${data}`);
     
     if (data == undefined || data.length == 0) {
         return undefined;
@@ -33,7 +33,7 @@ async function sha256Digest(cdata) { // create a digest from a piece of data
     let digest = await window.crypto.subtle.digest("SHA-256", _stringToArrayBuffer(data));
     let bytes = new Uint8Array(digest);
     let b64 = _arrayBufferToBase64(bytes);
-    console.log(`Returning: ${b64}`);
+    // console.log(`Returning: ${b64}`);
     return b64;
 }
 

@@ -118,8 +118,8 @@ async function handleChat(message) {
         
         // convert the arraybuffer into string
         let received_chat = _arrayBufferToString(decrypted_chat);
-        console.log("Received a message for me!");
-        console.log(received_chat);
+        // console.log("Received a message for me!");
+        // console.log(received_chat);
         
         // parse the chat as it is a stringified object
         let parsed = JSON.parse(received_chat);
@@ -136,7 +136,7 @@ async function handleChat(message) {
         // if the message integrity is valid, add the message to the DOM
         await addChatToDOM(received_chat);
     } else { // received a message not meant for me
-        console.log("Received a message not for me :(");
+        // console.log("Received a message not for me :(");
     }
 }
 
@@ -196,7 +196,7 @@ async function decryptSymKeys(symm_keys) {
             continue;
         }
         // if I can decrypt a symm key, then message meant for me, return the symm key
-        console.log("Decrypted my key! :)");
+        // console.log("Decrypted my key! :)");
         return dec_symm_keys;
     }
     // message not meant for me

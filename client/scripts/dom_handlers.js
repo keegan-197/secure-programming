@@ -36,7 +36,7 @@ async function updateKeys() {
     selfKeys["digest"] = await sha256Digest(selfKeys["pemPublic"]);
 
     selfKeys["counter"] = 0;
-    console.log("Updated keys");
+    console.log("Successfully updated keys");
 }
 
 function chatKeyPressed(event) { // detect input box enter pressed
@@ -52,6 +52,7 @@ function chatSendHandler() { // handle sending chat, and updating local message 
         messages[getCurrentChatKey()].push({"sender": "You", "message": document.getElementById("chatbox").value});
         updateMessagesUI();
     } else {
+        alert("WebSocket not connected")
         console.log("WebSocket not connected");
     }
 }
@@ -171,10 +172,8 @@ function updateActiveUsersList() {
             let tr = document.createElement('tr'); // create a new tr
             tr.appendChild(td); // add the th to the tr
             
-            // potentially vulnerable below
-            // tr.setAttribute('onclick', `startChat([\`${server['address']}\`, \`${server['clients'][client]}\`, \`${server["digests"][client]}\`])`);
+            // add an onclick to each user to start a chat with that user
             tr.addEventListener('click', () => startChat([server['address'], server['clients'][client], server['digests'][client]])); // give it an click event listener to select it
-            console.log(`Adding event listener ${[server['address'], server['clients'][client], server['digests'][client]]}`);
             
             table.appendChild(tr); // add the tr to the table
         }
@@ -220,7 +219,7 @@ async function startChat(user_rsa) {
 
         // if the selected group already has the user in it, do nothing
         if (new_chat["participantKey"].includes(user_rsa[1])) {
-            console.log("Group already exists 1");
+            console.log("The selected group already has this user in it");
             return;
         }
 
@@ -239,7 +238,7 @@ async function startChat(user_rsa) {
         // loop through the group and check if we already have the group added
         for (let activeChat of activeChats) {
             if (activeChat["participantDigest"] == digest) {
-                console.log("Group already exists 2");
+                console.log("This group already exists");
                 return;
             }
         }

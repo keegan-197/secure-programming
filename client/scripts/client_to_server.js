@@ -11,7 +11,6 @@ async function sendChat() {
     // get participants from the selected group from selectChatGroup()
 
     if (selectedChat < 0) { // only use sendChat to group chats
-        // console.log("Sending to global not handled yet");
         sendData({
             "type": "public_chat",
             "sender": selfKeys["digest"],
@@ -58,8 +57,6 @@ async function sendChat() {
         "chat": _arrayBufferToBase64(encrypted_message) // encode the encrypted chat message as b64
     }
 
-    // console.log(data);
-    
     sendData(data);
 }
 
