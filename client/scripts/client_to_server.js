@@ -21,8 +21,7 @@ async function sendChat() {
     }
 
 
-
-    let [generated_key, aes_settings] = selfKeys["aes-key"] // load the aes key
+    let [generated_key, aes_settings] = await generateAESKey(); // load the aes key
     
     
     let exported_key = await window.crypto.subtle.exportKey('raw', generated_key); // export the generated key
@@ -69,7 +68,7 @@ async function sendChat() {
     data = {
         "type": "chat",
         "destination_servers": activeChats[selectedChat]['destinationServers'],
-        "iv": _arrayBufferToBase64(selfKeys["iv"]), // each message needs a new IV, encoded in b64
+        "iv": _arrayBufferToBase64(aes_settings["iv"]), // each message needs a new IV, encoded in b64
         "symm_keys": symm_keys, // each participant in each message needs a new symmetric key (from the iv)
         "chat": _arrayBufferToBase64(encrypted_message) // encode the encrypted chat message as b64
     }

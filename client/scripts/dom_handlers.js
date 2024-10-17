@@ -33,9 +33,7 @@ async function updateKeys() {
     selfKeys["private"] = newKeyPair["private"];
     selfKeys["public"] = newKeyPair["public"];
     selfKeys["pemPublic"] = _arrayBufferToPem(selfKeys["public"], 0);
-    selfKeys["iv"] = window.crypto.getRandomValues(new Uint8Array(16));
     selfKeys["digest"] = await sha256Digest(selfKeys["pemPublic"]);
-    selfKeys["aes-key"] = await generateAESKey(); // generate an iv, key, and settings for AES encryption
 
     selfKeys["counter"] = 0;
     console.log("Updated keys");

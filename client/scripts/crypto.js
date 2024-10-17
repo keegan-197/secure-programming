@@ -7,7 +7,8 @@ Cheng Cao, Keegan Jackel, Malte Vollendorff, Po Yu Chen
 
 async function generateAESKey() {
     // generate an IV, AES key, and settings object
-    let aes_settings = { name: "AES-GCM", iv: selfKeys["iv"], length: 256 };
+    let new_iv = window.crypto.getRandomValues(new Uint8Array(16));
+    let aes_settings = { name: "AES-GCM", iv: new_iv, length: 128 };
 
     let generated_key = await window.crypto.subtle.generateKey(aes_settings, true, ["encrypt", "decrypt"]);
 
