@@ -139,7 +139,7 @@ public class ServerClient extends Thread
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                System.out.println("Couldn't connect to " + address);
             }
         }
 
@@ -201,7 +201,7 @@ public class ServerClient extends Thread
         @Override
         public void onError(Exception ex) 
         {
-            ex.printStackTrace();
+            
         }
     }
 

@@ -121,7 +121,6 @@ public class Server extends WebSocketServer
 
 		String content = Files.readString(Paths.get("server/servers.json").toAbsolutePath());
 		String temp = "ws://localhost:" + Integer.parseInt(args[0]);
-		System.out.println(temp);
 
 		JSONArray ja = new JSONArray(content);
 		JSONObject jo;
@@ -131,7 +130,7 @@ public class Server extends WebSocketServer
 			jo = ja.getJSONObject(i);
 			if (temp.equals(jo.get("address").toString()))
 			{
-				System.out.println(jo.get("address").toString());
+				// System.out.println(jo.get("address").toString());
 			}
 			else
 			{

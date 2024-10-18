@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /*
 
 Group 8
@@ -85,7 +88,6 @@ public class FileHandler implements HttpHandler
                     os.write(buffer, 0, bytesRead);
                 }
             }
-            System.out.println("Sent file: " + filePath);
         } 
         else 
         {
@@ -96,15 +98,29 @@ public class FileHandler implements HttpHandler
             {
                 os.write(response.getBytes());
             }
-            System.out.println("File not found: " + filePath);
         }
     }
 
-    private void handlePost(HttpExchange exchange) throws IOException, URISyntaxException 
+    private void handlePost(HttpExchange exchange) throws IOException, URISyntaxException, NoSuchAlgorithmException 
     {
         Map<String, List<String>> headers = exchange.getRequestHeaders();
-        String filePath = new URI("./" + String.join(", ", headers.get("X-filename"))).getPath();
-        System.out.println(filePath);
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(String.join(", ", headers.get("X-filename")).getBytes());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0'); // Append leading zero for single hex digits
+            }
+            hexString.append(hex);
+        }
+
+        String filePath = new URI(hexString.toString()).getPath();
+        String temp = String.join(", ", headers.get("X-filename"));
+        System.out.println(temp);
+        filePath = filePath + "." + temp.substring(temp.lastIndexOf(".") + 1);
         File file = new File(filePath);
 
         try (InputStream is = exchange.getRequestBody();
